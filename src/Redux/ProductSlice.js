@@ -8,7 +8,7 @@ export const fetchProducts = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await fetch(
-        "http://localhost:3000/api/products?limit=50"
+        `${import.meta.env.VITE_API_URL}/products?limit=50`
       );
 
       if (!response.ok) {
