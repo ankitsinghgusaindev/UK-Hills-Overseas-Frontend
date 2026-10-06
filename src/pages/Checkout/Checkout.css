@@ -1,0 +1,475 @@
+.checkout-page{
+  min-height:100vh;
+
+  padding:50px 8%;
+
+  background:
+  linear-gradient(
+    135deg,
+    rgba(15,118,110,.04),
+    rgba(20,184,166,.03)
+  );
+}
+
+.checkout-container{
+    display:grid;
+    grid-template-columns:
+    2fr 1fr;
+
+    gap:40px;
+}
+
+.checkout-form,
+.order-summary{
+
+  background:white;
+
+  padding:35px;
+
+  border-radius:28px;
+
+  border:1px solid rgba(
+    15,
+    118,
+    110,
+    .08
+  );
+
+  box-shadow:
+  0 20px 60px rgba(
+    15,
+    23,
+    42,
+    .08
+  );
+
+  transition:.3s;
+}
+
+.checkout-form:hover,
+.order-summary:hover{
+
+  transform:
+  translateY(-2px);
+
+}
+
+.checkout-form h2,
+.order-summary h2{
+
+  color:#0f766e;
+
+  font-size:1.8rem;
+
+  margin-bottom:25px;
+
+  position:relative;
+}
+
+.checkout-form h2::after,
+.order-summary h2::after{
+
+  content:"";
+
+  width:70px;
+  height:4px;
+
+  background:#14b8a6;
+
+  position:absolute;
+
+  left:0;
+  bottom:-10px;
+
+  border-radius:50px;
+}
+
+.checkout-form input,
+.checkout-form textarea{
+
+  width:100%;
+
+  padding:16px 18px;
+
+  margin-bottom:16px;
+
+  border:2px solid #e2e8f0;
+
+  border-radius:16px;
+
+  font-size:.95rem;
+
+  transition:.3s;
+
+  background:#fff;
+}
+
+.checkout-form input:focus,
+.checkout-form textarea:focus{
+
+  border-color:#14b8a6;
+
+  box-shadow:
+  0 0 0 4px
+  rgba(20,184,166,.12);
+
+}
+
+.checkout-form textarea{
+    min-height:120px;
+}
+
+.payment-btn{
+
+  width:100%;
+  padding:18px;
+  border:none;
+  border-radius:18px;
+
+  font-size:1rem;
+
+  font-weight:700;
+
+  color:white;
+
+  cursor:pointer;
+
+  background:
+  linear-gradient(
+    135deg,
+    #0f766e,
+    #14b8a6
+  );
+
+  box-shadow:
+  0 18px 35px
+  rgba(15,118,110,.25);
+
+  transition:.3s;
+}
+
+.payment-btn:hover{
+
+  transform:
+  translateY(-4px);
+
+}
+
+
+
+.order-summary p,
+.order-summary h3{
+    display:flex;
+    justify-content:space-between;
+    margin:15px 0;
+}
+
+
+.summary-item{
+
+  display:flex;
+
+  justify-content:space-between;
+
+  padding:12px 0;
+
+  border-bottom:1px dashed #e2e8f0;
+}
+
+.order-summary h3{
+
+  color:#0f766e;
+
+  font-size:1.5rem;
+
+  margin-top:20px;
+
+  padding-top:20px;
+
+  border-top:2px solid #e2e8f0;
+}
+
+
+.whatsapp-btn-order{
+
+  width:100%;
+  margin-top: 10px;
+
+  padding:16px;
+
+  border:none;
+
+  border-radius:18px;
+
+  font-weight:700;
+
+  color:white;
+
+  background:
+  linear-gradient(
+    135deg,
+    #22c55e,
+    #16a34a
+  );
+
+  transition:.3s;
+}
+
+.whatsapp-btn-order:hover{
+
+  transform:
+  translateY(-3px);
+
+}
+
+.payment-methods{
+
+  padding:20px;
+  
+
+  background:#f8fafc;
+
+  border-radius:20px;
+}
+
+.payment-methods h3{
+
+  margin-bottom:5px;
+
+  color:#0f766e;
+}
+
+.payment-option{
+
+  display:flex;
+
+  align-items:center;
+
+  gap:15px;
+
+  padding:15px;
+
+  margin-bottom:5px;
+
+  border:2px solid #e2e8f0;
+
+  border-radius:16px;
+
+  cursor:pointer;
+
+  transition:.3s;
+}
+
+.payment-option:hover{
+
+  border-color:#14b8a6;
+
+  background:white;
+}
+
+.payment-option input{
+
+  width:18px;
+  height:18px;
+}
+/* ===================================
+   TABLET (1024px)
+=================================== */
+
+@media (max-width:1024px){
+
+  .checkout-page{
+    padding:40px 5%;
+  }
+
+  .checkout-container{
+    gap:25px;
+  }
+
+  .checkout-form,
+  .order-summary{
+    padding:25px;
+  }
+
+}
+
+/* ===================================
+   MOBILE (768px)
+=================================== */
+
+@media (max-width:768px){
+
+  .checkout-container{
+    grid-template-columns:1fr;
+  }
+
+  .checkout-form,
+  .order-summary{
+    padding:22px;
+    border-radius:22px;
+  }
+
+  .payment-btn,
+  .whatsapp-btn-order{
+    padding:15px;
+  }
+}
+
+/* ===================================
+   SMALL MOBILE (480px)
+=================================== */
+
+@media (max-width:480px){
+
+  .checkout-page{
+    padding:20px 15px;
+  }
+
+  .checkout-form,
+  .order-summary{
+    padding:15px;
+  }
+
+  .checkout-form h2,
+  .order-summary h2{
+    font-size:1.2rem;
+  }
+
+  .summary-item{
+    font-size:.9rem;
+  }
+
+  .order-summary h3{
+    font-size:1rem;
+  }
+
+}
+
+/* Existing Checkout styles remain unchanged above. */
+
+/* ===================================
+   STAGE 1 - FORM ACCESSIBILITY
+=================================== */
+
+.form-field {
+  margin-bottom: 16px;
+}
+
+.form-field label {
+  display: block;
+  margin-bottom: 7px;
+  color: #334155;
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.checkout-form input:focus-visible,
+.checkout-form textarea:focus-visible,
+.payment-option input:focus-visible,
+.payment-btn:focus-visible,
+.whatsapp-btn-order:focus-visible {
+  outline: 3px solid rgba(20, 184, 166, 0.35);
+  outline-offset: 2px;
+}
+
+.payment-btn:disabled,
+.whatsapp-btn-order:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.payment-btn:disabled:hover,
+.whatsapp-btn-order:disabled:hover {
+  transform: none;
+}
+
+/* Payment method grouping */
+.payment-methods {
+  border: 0;
+  margin: 20px 0;
+  padding: 20px;
+}
+
+.payment-methods legend {
+  padding: 0;
+  margin-bottom: 12px;
+  color: #0f766e;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+/* Better product-summary readability */
+.summary-item > span:first-child {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.summary-item small {
+  color: #64748b;
+  font-size: 0.82rem;
+}
+
+/* Empty checkout state */
+.empty-checkout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-checkout-card {
+  width: min(100%, 560px);
+  padding: 40px;
+  background: #fff;
+  border: 1px solid rgba(15, 118, 110, 0.08);
+  border-radius: 28px;
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.08);
+  text-align: center;
+}
+
+.empty-checkout-card h1 {
+  margin-bottom: 12px;
+  color: #0f766e;
+}
+
+.empty-checkout-card p {
+  margin-bottom: 24px;
+  color: #64748b;
+}
+
+/* ===================================
+   REDUCED MOTION
+=================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .checkout-form,
+  .order-summary,
+  .payment-btn,
+  .whatsapp-btn-order {
+    transition: none;
+  }
+
+  .payment-btn:hover,
+  .whatsapp-btn-order:hover,
+  .checkout-form:hover,
+  .order-summary:hover {
+    transform: none;
+  }
+}
+
+/* ===================================
+   SMALL MOBILE
+=================================== */
+
+@media (max-width: 480px) {
+  .empty-checkout-card {
+    padding: 25px 18px;
+    border-radius: 22px;
+  }
+
+  .payment-methods {
+    padding: 15px;
+  }
+}

@@ -1,0 +1,48 @@
+# Dependencies
+node_modules/
+
+# Build
+dist/
+dist-ssr/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Editor directories and files
+.vscode/
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Generated Prisma files
+src/generated/prisma/
+
+# Backend / Prisma files
+prisma/
+prisma7.config.ts
+scripts/
+src/lib/prisma.ts
+
+# AI / development tool configuration
+.agents/
+.claude/
+.windsurf/
+
+# Project-generated files
+project-structure.txt
+skills-lock.json
