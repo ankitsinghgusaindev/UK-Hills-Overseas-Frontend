@@ -1,6 +1,6 @@
 import "./CartModal.css";
 import { useSelector, useDispatch } from "react-redux";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
@@ -26,13 +26,10 @@ function CartModal({ isOpen, onClose }) {
    * Single source of truth for cart pricing.
    * CartModal and Checkout now use the same calculation.
    */
-  const {
-    subtotal,
-    discount,
-    shipping,
-    gst,
-    total,
-  } = calculateCartTotals(cartItems, appliedCoupon);
+  const { subtotal, discount, shipping, gst, total } = calculateCartTotals(
+    cartItems,
+    appliedCoupon,
+  );
 
   const handleCheckout = () => {
     if (cartItems.length === 0) {
@@ -78,11 +75,19 @@ function CartModal({ isOpen, onClose }) {
     }, 400);
   };
 
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [isOpen]);
+
   return (
-    <div
-      className={`cart-overlay ${isOpen ? "show" : ""}`}
-      role="presentation"
-    >
+    <div className={`cart-overlay ${isOpen ? "show" : ""}`} role="presentation">
       <aside
         className="cart-modal"
         role="dialog"
@@ -92,11 +97,7 @@ function CartModal({ isOpen, onClose }) {
         <div className="cart-header">
           <h2 id="cart-title">Your Cart</h2>
 
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Close cart"
-          >
+          <button type="button" onClick={onClose} aria-label="Close cart">
             ✖
           </button>
         </div>
@@ -130,10 +131,7 @@ function CartModal({ isOpen, onClose }) {
                 className="cart-item"
                 key={`${item.productId}-${item.variantId}`}
               >
-                <img
-                  src={item.image}
-                  alt={item.name}
-                />
+                <img src={item.image} alt={item.name} />
 
                 <div>
                   <h4>{item.name}</h4>
@@ -151,7 +149,7 @@ function CartModal({ isOpen, onClose }) {
                           decreaseQty({
                             productId: item.productId,
                             variantId: item.variantId,
-                          })
+                          }),
                         )
                       }
                     >
@@ -168,7 +166,7 @@ function CartModal({ isOpen, onClose }) {
                           increaseQty({
                             productId: item.productId,
                             variantId: item.variantId,
-                          })
+                          }),
                         )
                       }
                     >
@@ -185,7 +183,7 @@ function CartModal({ isOpen, onClose }) {
                       removeFromCart({
                         productId: item.productId,
                         variantId: item.variantId,
-                      })
+                      }),
                     )
                   }
                 >
@@ -254,10 +252,7 @@ function CartModal({ isOpen, onClose }) {
                 </div>
               )}
 
-              <button
-                type="button"
-                onClick={handleCoupon}
-              >
+              <button type="button" onClick={handleCoupon}>
                 Apply Coupon
               </button>
 

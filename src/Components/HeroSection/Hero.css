@@ -1,56 +1,57 @@
-.hero{
-    min-height:90vh;
 
-    background:
+.hero {
+  min-height: clamp(560px, 80vh, 760px);
+  background:
     linear-gradient(
-        rgba(15,118,110,.75),
-        rgba(15,118,110,.75)
+      rgba(15, 118, 110, 0.75),
+      rgba(15, 118, 110, 0.75)
     ),
     url("/images/slider1.jpg");
-
-    background-size:cover;
-    background-position:center;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    text-align:center;
-
-    color:white;
-    padding:2rem;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: white;
+  padding: 48px 24px;
 }
 
-.hero-content{
-    max-width:850px;
-    animation:fadeUp 1s ease;
+.hero-content {
+  width: 100%;
+  max-width: 900px;
+  margin-inline: auto;
+  animation: fadeUp 1s ease;
 }
 
-.hero-badge{
-    display:inline-block;
-    padding:10px 20px;
-    border-radius:50px;
-
-    background:rgba(255,255,255,.15);
-    backdrop-filter:blur(10px);
-
-    margin-bottom:20px;
+.hero-badge {
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: 50px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  margin-bottom: 20px;
 }
 
-.hero h1{
-    font-size:4rem;
-    line-height:1.2;
-    margin-bottom:20px;
+.hero h1 {
+  max-width: 900px;
+  margin: 0 auto 20px;
+  font-size: clamp(2.0rem, 4.2vw, 3.5rem);
+  line-height: 1.2;
+  font-weight: 800;
+  text-wrap: balance;
 }
 
-.hero p{
-    font-size:1.2rem;
-    margin-bottom:30px;
+.hero p {
+  font-size: clamp(1rem, 1.4vw, 1.2rem);
+  margin-bottom: 30px;
 }
 
-.hero-buttons{
-    display:flex;
-    justify-content:center;
-    gap:20px;
+.hero-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
 }
 
 @keyframes fadeUp{
