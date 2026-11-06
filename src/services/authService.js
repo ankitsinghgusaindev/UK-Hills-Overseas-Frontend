@@ -1,79 +1,37 @@
-const API_URL = import.meta.env.VITE_API_URL;
 
-// REGISTER
+import { apiRequest } from "./apiClient";
+
 export const registerUser = async ({ name, email, password }) => {
-  const response = await fetch(`${API_URL}/auth/register`, {
+  const result = await apiRequest("/auth/register", {
     method: "POST",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ name, email, password }),
+    body: { name, email, password },
   });
-
-  const result = await response.json();
-
-  if (!response.ok || !result.success) {
-    throw new Error(result.message || "Registration failed.");
-  }
 
   return result.data;
 };
 
-// LOGIN
 export const loginUser = async ({ email, password }) => {
-  const response = await fetch(`${API_URL}/auth/login`, {
+  const result = await apiRequest("/auth/login", {
     method: "POST",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ email, password }),
+    body: { email, password },
   });
-
-  const result = await response.json();
-
-  if (!response.ok || !result.success) {
-    throw new Error(result.message || "Login failed.");
-  }
 
   return result.data.user;
 };
 
-// GET CURRENT USER
 export const getCurrentUser = async (context) => {
-  const response = await fetch(
-    `${API_URL}/auth/me?context=${context}`,
-    {
-      method: "GET",
-      credentials: "include",
-    }
+  const result = await apiRequest(
+    `/auth/me?context=${encodeURIComponent(context)}`
   );
-
-  const result = await response.json();
-
-  if (!response.ok || !result.success) {
-    throw new Error(result.message || "Not authenticated.");
-  }
 
   return result.data;
 };
 
-// LOGOUT
 export const logoutUser = async (context) => {
-  const response = await fetch(
-    `${API_URL}/auth/logout?context=${context}`,
+  return apiRequest(
+    `/auth/logout?context=${encodeURIComponent(context)}`,
     {
       method: "POST",
-      credentials: "include",
     }
   );
-
-  const result = await response.json();
-
-  if (!response.ok || !result.success) {
-    throw new Error(result.message || "Logout failed.");
-  }
-
-  return result;
 };

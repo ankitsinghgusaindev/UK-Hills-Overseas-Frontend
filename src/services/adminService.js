@@ -1,314 +1,174 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL.replace("/api", "");
 
-export async function fetchAdminOrders() {
-  const response = await fetch(`${API_BASE_URL}/api/admin/orders`, {
-    method: "GET",
-    credentials: "include",
-  });
+import { apiRequest, ApiError } from "./apiClient";
 
-  const result = await response.json();
+// Shared helper for admin API requests.
+async function adminRequest(path, options, fallbackMessage) {
+  try {
+    const result = await apiRequest(path, options);
+    return result.data;
+  } catch (error) {
+    // Preserve the existing operation-specific fallback messages.
+    if (
+      error instanceof ApiError &&
+      error.message.startsWith("Request failed with status")
+    ) {
+      throw new ApiError(fallbackMessage, {
+        status: error.status,
+        requestId: error.requestId,
+      });
+    }
 
-  if (!response.ok) {
-    throw new Error(result.message || "Failed to fetch orders");
+    throw error;
   }
-
-  return result.data;
 }
 
-export async function fetchAdminOrderById(orderId) {
-  const response = await fetch(
-    `${API_BASE_URL}/api/admin/orders/${orderId}`,
-    {
-      method: "GET",
-      credentials: "include",
-    },
+// ORDERS
+
+export function fetchAdminOrders() {
+  return adminRequest(
+    "/admin/orders",
+    { method: "GET" },
+    "Failed to fetch orders"
   );
-
-  const result = await response.json();
-
-  if (!response.ok) {
-    throw new Error(result.message || "Failed to fetch order");
-  }
-
-  return result.data;
 }
 
-export async function updateAdminOrderStatus(orderId, status) {
-  const response = await fetch(
-    `${API_BASE_URL}/api/admin/orders/${orderId}/status`,
+export function fetchAdminOrderById(orderId) {
+  return adminRequest(
+    `/admin/orders/${orderId}`,
+    { method: "GET" },
+    "Failed to fetch order"
+  );
+}
+
+export function updateAdminOrderStatus(orderId, status) {
+  return adminRequest(
+    `/admin/orders/${orderId}/status`,
     {
       method: "PATCH",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        status,
-      }),
+      body: { status },
     },
+    "Failed to update order status"
   );
-
-  const result = await response.json();
-
-  if (!response.ok) {
-    throw new Error(result.message || "Failed to update order status");
-  }
-
-  return result.data;
 }
 
-export async function fetchAdminProducts() {
-  const response = await fetch(
-    `${API_BASE_URL}/api/admin/products`,
-    {
-      method: "GET",
-      credentials: "include",
-    }
+// PRODUCTS
+
+export function fetchAdminProducts() {
+  return adminRequest(
+    "/admin/products",
+    { method: "GET" },
+    "Failed to fetch products"
   );
-
-  const result = await response.json();
-
-  if (!response.ok) {
-    throw new Error(
-      result.message || "Failed to fetch products"
-    );
-  }
-
-  return result.data;
 }
 
-export async function createAdminProductVariant(productId, variantData) {
-  const response = await fetch(
-    `${API_BASE_URL}/api/admin/products/${productId}/variants`,
+export function fetchAdminProductById(productId) {
+  return adminRequest(
+    `/admin/products/${productId}`,
+    { method: "GET" },
+    "Failed to fetch product"
+  );
+}
+
+export function createAdminProduct(productData) {
+  return adminRequest(
+    "/admin/products",
     {
       method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(variantData),
-    }
+      body: productData,
+    },
+    "Failed to create product"
   );
-
-  const result = await response.json();
-
-  if (!response.ok) {
-    throw new Error(
-      result.message || "Failed to create variant"
-    );
-  }
-
-  return result.data;
 }
 
-export async function updateAdminProductVariant(
-  variantId,
-  variantData,
-) {
-  const response = await fetch(
-    `${API_BASE_URL}/api/admin/variants/${variantId}`,
+export function updateAdminProduct(productId, productData) {
+  return adminRequest(
+    `/admin/products/${productId}`,
     {
       method: "PATCH",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(variantData),
+      body: productData,
     },
+    "Failed to update product"
   );
-
-  const result = await response.json();
-
-  if (!response.ok) {
-    throw new Error(
-      result.message || "Failed to update variant",
-    );
-  }
-
-  return result.data;
 }
 
-export async function deleteAdminProductVariant(variantId) {
-  const response = await fetch(
-    `${API_BASE_URL}/api/admin/variants/${variantId}`,
-    {
-      method: "DELETE",
-      credentials: "include",
-    },
+export function deleteAdminProduct(productId) {
+  return adminRequest(
+    `/admin/products/${productId}`,
+    { method: "DELETE" },
+    "Failed to delete product"
   );
-
-  const result = await response.json();
-
-  if (!response.ok) {
-    throw new Error(
-      result.message || "Failed to delete variant",
-    );
-  }
-
-  return result.data;
 }
 
-export async function updateAdminVariantStock(variantId, stock) {
-  const response = await fetch(
-    `${API_BASE_URL}/api/admin/variants/${variantId}/inventory`,
-    {
-      method: "PATCH",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        stock: Number(stock),
-      }),
-    }
-  );
+// PRODUCT VARIANTS
 
-  const result = await response.json();
-
-  if (!response.ok) {
-    throw new Error(result.message || "Failed to update stock");
-  }
-
-  return result.data;
-}
-
-export async function fetchAdminCategories() {
-  const response = await fetch(
-    `${API_BASE_URL}/api/admin/categories`,
-    {
-      method: "GET",
-      credentials: "include",
-    }
-  );
-
-  const result = await response.json();
-
-  if (!response.ok) {
-    throw new Error(
-      result.message || "Failed to fetch categories"
-    );
-  }
-
-  return result.data;
-}
-
-export async function createAdminCategory(categoryData) {
-  const response = await fetch(
-    `${API_BASE_URL}/api/admin/categories`,
+export function createAdminProductVariant(productId, variantData) {
+  return adminRequest(
+    `/admin/products/${productId}/variants`,
     {
       method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(categoryData),
-    }
+      body: variantData,
+    },
+    "Failed to create variant"
   );
-
-  const result = await response.json();
-
-  if (!response.ok) {
-    throw new Error(
-      result.message || "Failed to create category"
-    );
-  }
-
-  return result.data;
 }
 
-export async function deleteAdminCategory(categoryId) {
-  const response = await fetch(
-    `${API_BASE_URL}/api/admin/categories/${categoryId}`,
-    {
-      method: "DELETE",
-      credentials: "include",
-    }
-  );
-
-  const result = await response.json();
-
-  if (!response.ok) {
-    throw new Error(
-      result.message || "Failed to delete category"
-    );
-  }
-
-  return result.data;
-}
-
-export async function fetchAdminProductById(productId) {
-  const response = await fetch(
-    `${API_BASE_URL}/api/admin/products/${productId}`,
-    {
-      method: "GET",
-      credentials: "include",
-    }
-  );
-
-  const result = await response.json();
-
-  if (!response.ok) {
-    throw new Error(result.message || "Failed to fetch product");
-  }
-
-  return result.data;
-}
-
-export async function updateAdminProduct(productId, productData) {
-  const response = await fetch(
-    `${API_BASE_URL}/api/admin/products/${productId}`,
+export function updateAdminProductVariant(variantId, variantData) {
+  return adminRequest(
+    `/admin/variants/${variantId}`,
     {
       method: "PATCH",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(productData),
-    }
-  );
-
-  const result = await response.json();
-
-  if (!response.ok) {
-    throw new Error(result.message || "Failed to update product");
-  }
-
-  return result.data;
-}
-export async function deleteAdminProduct(productId) {
-  const response = await fetch(
-    `${API_BASE_URL}/api/admin/products/${productId}`,
-    {
-      method: "DELETE",
-      credentials: "include",
-    }
-  );
-
-  const result = await response.json();
-
-  if (!response.ok) {
-    throw new Error(result.message || "Failed to delete product");
-  }
-
-  return result.data;
-}
-
-
-export async function createAdminProduct(productData) {
-  const response = await fetch(`${API_BASE_URL}/api/admin/products`, {
-    method: "POST",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
+      body: variantData,
     },
-    body: JSON.stringify(productData),
-  });
+    "Failed to update variant"
+  );
+}
 
-  const result = await response.json();
+export function deleteAdminProductVariant(variantId) {
+  return adminRequest(
+    `/admin/variants/${variantId}`,
+    { method: "DELETE" },
+    "Failed to delete variant"
+  );
+}
 
-  if (!response.ok) {
-    throw new Error(result.message || "Failed to create product");
-  }
+// INVENTORY
 
-  return result.data;
+export function updateAdminVariantStock(variantId, stock) {
+  return adminRequest(
+    `/admin/variants/${variantId}/inventory`,
+    {
+      method: "PATCH",
+      body: { stock: Number(stock) },
+    },
+    "Failed to update stock"
+  );
+}
+
+// CATEGORIES
+
+export function fetchAdminCategories() {
+  return adminRequest(
+    "/admin/categories",
+    { method: "GET" },
+    "Failed to fetch categories"
+  );
+}
+
+export function createAdminCategory(categoryData) {
+  return adminRequest(
+    "/admin/categories",
+    {
+      method: "POST",
+      body: categoryData,
+    },
+    "Failed to create category"
+  );
+}
+
+export function deleteAdminCategory(categoryId) {
+  return adminRequest(
+    `/admin/categories/${categoryId}`,
+    { method: "DELETE" },
+    "Failed to delete category"
+  );
 }

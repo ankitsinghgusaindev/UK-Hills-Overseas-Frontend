@@ -1,32 +1,23 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { products as localProducts } from "./ProductData";
 import { adaptBackendProduct } from "../utils/productAdapter";
+import { apiRequest } from "../services/apiClient";
 
 // Fetch products from the backend
+
 export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/products?limit=50`
-      );
+      const result = await apiRequest("/products?limit=50");
 
-      if (!response.ok) {
-        throw new Error(`Failed to fetch products (${response.status})`);
-      }
-
-      const result = await response.json();
-
-      if (!result.success) {
-        throw new Error(result.message || "Failed to fetch products");
-      }
-
-      return result.data.map(adaptBackendProduct)
+      return result.data.map(adaptBackendProduct);
     } catch (error) {
       return rejectWithValue(error.message);
     }
   }
 );
+
 
 const initialState = {
   products: localProducts,

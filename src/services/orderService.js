@@ -1,4 +1,5 @@
-const API_URL = import.meta.env.VITE_API_URL;
+
+import { apiRequest } from "./apiClient";
 
 // CREATE ORDER
 export const createOrder = async ({
@@ -14,13 +15,9 @@ export const createOrder = async ({
     quantity: Number(item.quantity),
   }));
 
-  const response = await fetch(`${API_URL}/orders`, {
+  const result = await apiRequest("/orders", {
     method: "POST",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
+    body: {
       customer: {
         name: customer.name.trim(),
         email: customer.email.trim(),
@@ -30,23 +27,15 @@ export const createOrder = async ({
         state: customer.state.trim(),
         postalCode: customer.postalCode.trim(),
       },
-
       items,
 
-      // Send only the coupon code.
       // Backend calculates the actual discount.
       coupon: coupon.trim().toUpperCase(),
 
       orderSource,
       paymentMethod,
-    }),
+    },
   });
-
-  const result = await response.json();
-
-  if (!response.ok || !result.success) {
-    throw new Error(result.message || "Failed to create order.");
-  }
 
   return result.data;
 };
@@ -54,29 +43,15 @@ export const createOrder = async ({
 // SAVE RAZORPAY ORDER ID
 export const saveRazorpayOrderId = async (
   orderId,
-  razorpayOrderId,
+  razorpayOrderId
 ) => {
-  const response = await fetch(
-    `${API_URL}/orders/${orderId}/razorpay`,
+  const result = await apiRequest(
+    `/orders/${orderId}/razorpay`,
     {
       method: "PATCH",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        razorpayOrderId,
-      }),
-    },
+      body: { razorpayOrderId },
+    }
   );
-
-  const result = await response.json();
-
-  if (!response.ok || !result.success) {
-    throw new Error(
-      result.message || "Unable to save Razorpay order ID.",
-    );
-  }
 
   return result.data;
 };
@@ -88,73 +63,35 @@ export const verifyRazorpayPayment = async ({
   razorpayPaymentId,
   razorpaySignature,
 }) => {
-  const response = await fetch(
-    `${API_URL}/orders/verify-payment`,
-    {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        orderId,
-        razorpayOrderId,
-        razorpayPaymentId,
-        razorpaySignature,
-      }),
+  const result = await apiRequest("/orders/verify-payment", {
+    method: "POST",
+    body: {
+      orderId,
+      razorpayOrderId,
+      razorpayPaymentId,
+      razorpaySignature,
     },
-  );
-
-  const result = await response.json();
-
-  if (!response.ok || !result.success) {
-    throw new Error(
-      result.message || "Payment verification failed.",
-    );
-  }
+  });
 
   return result.data;
 };
 
 // CREATE RAZORPAY ORDER
 export const createRazorpayOrder = async ({ orderId }) => {
-  const response = await fetch(
-    `${API_URL}/payment/create-order`,
-    {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        orderId,
-      }),
-    },
-  );
-
-  const result = await response.json();
-
-  if (!response.ok || !result.success) {
-    throw new Error(
-      result.message || "Failed to create Razorpay order.",
-    );
-  }
+  const result = await apiRequest("/payment/create-order", {
+    method: "POST",
+    body: { orderId },
+  });
 
   return result.data;
 };
 
 // FETCH USER ORDERS
 export const fetchOrders = async () => {
-  const response = await fetch(`${API_URL}/orders`, {
+  const result = await apiRequest("/orders", {
     method: "GET",
-    credentials: "include",
   });
-
-  const result = await response.json();
-
-  if (!response.ok || !result.success) {
-    throw new Error(result.message || "Failed to fetch orders.");
-  }
 
   return result.data;
 };
+
